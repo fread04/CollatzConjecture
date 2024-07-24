@@ -6,10 +6,23 @@ void collatz(std::string& n, std::string& max, int& steps, std::vector<std::stri
 std::string increase(std::string& n);
 std::string decrease(std::string& n);
 int lastSymbol(std::string& n);
+bool isValidInteger(const std::string& n);
 
 int main()
 {
-    std::string n{ "123456" };
+    std::string n;
+    while (true) 
+    {
+        std::cout << "Enter your number: ";
+        std::getline(std::cin >> std::ws, n);
+
+        if (!isValidInteger(n)) {
+            std::cout << "Invalid input. Please enter an integer.\n";
+            continue;
+        }
+        break;
+    }
+
     std::string max{ n };
     int steps{ 0 };
     std::vector<std::string> sequence;
@@ -32,8 +45,11 @@ void collatz(std::string& n, std::string& max, int& steps, std::vector<std::stri
     
     while (n.compare("1"))
     {
-        n = lastSymbol(n) % 2 == 0 ? decrease(n) : increase(n);
-        max = n.compare(max) ? max : n;
+        n = lastSymbol(n) % 2 == 0 ? decrease(n) : increase(n); // increase or decrease number
+        if (n.length() > max.length() || (n.length() == max.length() && n > max)) // compare n with max
+        {
+            max = n;
+        }
         steps++;
         
         sequence.push_back(n);  // Store each number in the sequence
@@ -96,4 +112,11 @@ int lastSymbol(std::string& n)
     }
 
     return n.back() - '0';
+}
+
+// checks if string contains valid number
+bool isValidInteger(const std::string& n) {
+    if (n.empty()) return false;
+
+    return n.find_first_not_of("0123456789", 0) == std::string::npos;
 }
