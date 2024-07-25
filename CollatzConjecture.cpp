@@ -20,6 +20,8 @@ int main()
             std::cout << "Invalid input. Please enter an integer.\n";
             continue;
         }
+
+        n.erase(0, n.find_first_not_of('0')); // remove leading zeros
         break;
     }
 
