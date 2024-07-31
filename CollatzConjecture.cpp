@@ -3,9 +3,9 @@
 #include <vector>
 
 void collatz(std::string& n, std::string& max, int& steps, std::vector<std::string>& sequence);
-std::string increase(std::string& n);
-std::string decrease(std::string& n);
-int lastSymbol(std::string& n);
+std::string collatz_step_up(std::string& n);
+std::string collatz_step_down(std::string& n);
+bool isEven(std::string& n);
 bool isValidInteger(const std::string& n);
 
 int main()
@@ -47,7 +47,7 @@ void collatz(std::string& n, std::string& max, int& steps, std::vector<std::stri
     
     while (n.compare("1"))
     {
-        n = lastSymbol(n) % 2 == 0 ? decrease(n) : increase(n); // increase or decrease number
+        n = isEven(n) ? collatz_step_down(n) : collatz_step_up(n); // increase or decrease number
         if (n.length() > max.length() || (n.length() == max.length() && n > max)) // compare n with max
         {
             max = n;
@@ -59,7 +59,7 @@ void collatz(std::string& n, std::string& max, int& steps, std::vector<std::stri
 }
 
 // calculates increased number n = 3 * n + 1
-std::string increase(std::string& n)
+std::string collatz_step_up(std::string& n)
 {
     if (n.empty())
     {
@@ -84,7 +84,7 @@ std::string increase(std::string& n)
 }
 
 // calculates decreased number n = n / 2
-std::string decrease(std::string& n)
+std::string collatz_step_down(std::string& n)
 {
     if (n.empty())
     {
@@ -105,20 +105,23 @@ std::string decrease(std::string& n)
     return n;
 }
 
-// returns last symbol of a string as a number 
-int lastSymbol(std::string& n)
+// returns true if last symbol of a string is even
+bool isEven(std::string& n)
 {
     if (n.empty())
     {
         return 0;
     }
 
-    return n.back() - '0';
+    return (n.back() - '0') % 2 == 0;
 }
 
 // checks if string contains valid number
 bool isValidInteger(const std::string& n) {
-    if (n.empty()) return false;
+    if (n.empty()) 
+    {
+        return false;
+    } 
 
     return n.find_first_not_of("0123456789", 0) == std::string::npos;
 }
